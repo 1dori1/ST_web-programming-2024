@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>승환 하이</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center; 
+            align-items: center;     
+            height: 100vh;           
+            margin: 0;               
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif; 
+        }
+        .container {
+            position: relative; 
+        }
+
+        button {
+            background-color: #4CAF50; 
+            border: none;         
+            color: white;            
+            padding: 15px 32px;       
+            text-align: center;        
+            text-decoration: none;     
+            display: inline-block;   
+            font-size: 20px;         
+            margin: 4px 2px;         
+            cursor: pointer;           
+            border-radius: 12px;       
+            transition: background-color 0.3s ease; 
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+        img {
+            position: absolute; 
+            top: -300px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            width: 500px; 
+            height: 300px; 
+            z-index: 0; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="angry.jpg" alt="위에 있는 이미지">
+    <button onclick="alert('찌푸리지마세요!')">눌러보세용</button>
+</body>
+</html>
