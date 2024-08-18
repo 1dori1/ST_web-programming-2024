@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>도리의 도서관</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)),
+                        url('bookshelf.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        #search-container {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 0 20px;
+        }
+
+        .search-field {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 300px;
+            box-sizing: border-box;
+            margin: 5px;
+        }
+
+        #search {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+
+        #search:hover {
+            background-color: #0056b3;
+        }
+
+        #books {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .book-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            text-align: center;
+            padding: 15px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .book-card:hover {
+            transform: scale(1.05);
+        }
+
+        .book-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .book-card h2 {
+            font-size: 16px;
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .book-card p {
+            color: #555;
+        }
+
+        #cart-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        #cart h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        #cart {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .cart-item {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            width: 200px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .cart-item h2 {
+            font-size: 14px;
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .cart-item button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .cart-item button:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>도리의 도서관</h1>
+    <div id="search-container">
+        <input id="title" class="search-field" type="text" placeholder="책 제목">
+        <button id="search">검색</button>
+    </div>
+
+    <div id="books"></div>
+
+    <div id="cart-container">
+        <h2>장바구니</h2>
+        <div id="cart"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $("#search").click(function () {
+                $.ajax({
+                    method: "GET",
+                    url: "https://dapi.kakao.com/v3/search/book?target=title",
+                    data: {
+                        query: $("#title").val(),
+                    },
+                    headers: { Authorization: "KakaoAK b98c02b4683f0085c57adc551b2db5af" }
+                })
+                .done(function (msg) {
+                    $("#books").empty(); 
+                    msg.documents.forEach(function (book) {
+                        const bookCard = `
+                            <div class="book-card">
+                                <img src="${book.thumbnail}" alt="${book.title}">
+                                <h2>${book.title}</h2>
+                                <button class="add-to-cart" data-title="${book.title}" data-thumbnail="${book.thumbnail}">추가</button>
+                            </div>
+                        `;
+                        $("#books").append(bookCard);
+                    });
+
+                    // 장바구니 추가 이벤트
+                    $(".add-to-cart").click(function () {
+                        const title = $(this).data("title");
+                        const thumbnail = $(this).data("thumbnail");
+                        const cartItem = `
+                            <div class="cart-item">
+                                <img src="${thumbnail}" alt="${title}">
+                                <h2>${title}</h2>
+                                <button class="remove-from-cart" data-title="${title}">제거</button>
+                            </div>
+                        `;
+                        $("#cart").append(cartItem);
+                        alert(`${title} \n :: 추가 완료! `);
+                    });
+
+                    // 장바구니에서 책 제거
+                    $("#cart").on("click", ".remove-from-cart", function () {
+                        const title = $(this).data("title");
+                        $(this).closest(".cart-item").remove();
+                        alert(`${title} \n :: 제거 완료! `);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
