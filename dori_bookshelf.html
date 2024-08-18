@@ -13,7 +13,7 @@
             padding: 0;
             box-sizing: border-box;
             background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)),
-                        url('bookshelf.jpg') no-repeat center center fixed;
+                url('bookshelf.jpg') no-repeat center center fixed;
             background-size: cover;
         }
 
@@ -178,7 +178,8 @@
                 margin: 10px 0;
             }
 
-            .book-card, .cart-item {
+            .book-card,
+            .cart-item {
                 width: 90%;
                 max-width: 300px;
             }
@@ -213,45 +214,44 @@
                     },
                     headers: { Authorization: "KakaoAK b98c02b4683f0085c57adc551b2db5af" }
                 })
-                .done(function (msg) {
-                    $("#books").empty(); 
-                    msg.documents.forEach(function (book) {
-                        const bookCard = `
+                    .done(function (msg) {
+                        $("#books").empty();
+                        msg.documents.forEach(function (book) {
+                            const bookCard = `
                             <div class="book-card">
                                 <img src="${book.thumbnail}" alt="${book.title}">
                                 <h2>${book.title}</h2>
                                 <button class="add-to-cart" data-title="${book.title}" data-thumbnail="${book.thumbnail}">추가</button>
                             </div>
                         `;
-                        $("#books").append(bookCard);
-                    });
+                            $("#books").append(bookCard);
+                        });
 
-                    // 장바구니 추가 이벤트
-                    $(".add-to-cart").click(function () {
-                        const title = $(this).data("title");
-                        const thumbnail = $(this).data("thumbnail");
-                        const cartItem = `
+                        // 장바구니 추가 이벤트
+                        $(".add-to-cart").click(function () {
+                            const title = $(this).data("title");
+                            const thumbnail = $(this).data("thumbnail");
+                            const cartItem = `
                             <div class="cart-item">
                                 <img src="${thumbnail}" alt="${title}">
                                 <h2>${title}</h2>
                                 <button class="remove-from-cart" data-title="${title}">제거</button>
                             </div>
                         `;
-                        $("#cart").append(cartItem);
-                        alert(`${title} \n :: 추가 완료! `);
-                    });
+                            $("#cart").append(cartItem);
+                            alert(`${title} \n :: 추가 완료! `);
+                        });
 
-                    // 장바구니에서 책 제거
-                    $("#cart").on("click", ".remove-from-cart", function () {
-                        const title = $(this).data("title");
-                        $(this).closest(".cart-item").remove();
-                        alert(`${title} \n :: 제거 완료! `);
+                        // 장바구니에서 책 제거
+                        $("#cart").on("click", ".remove-from-cart", function () {
+                            const title = $(this).data("title");
+                            $(this).closest(".cart-item").remove();
+                            alert(`${title} \n :: 제거 완료! `);
+                        });
                     });
-                });
             });
         });
     </script>
 </body>
 
-</html>
 </html>
