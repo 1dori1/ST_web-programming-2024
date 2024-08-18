@@ -1,11 +1,34 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset = "UTF-8">
-        <title>도리의 주식정보</title>
-    </head>
+<html lang="ko">
 
-    <body>
-        
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도리 배당주식정보 </title>
+</head>
+
+<body>
+    <!-- 웹페이지에 표시할 내용을 적습니다.-->
+    <h1>도리의 배당주식정보 홈페이지</h1>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous">
+        </script>
+    <script>
+        $.ajax({
+            method: "GET",
+            url: "https://opendart.fss.or.kr/api/alotMatter.json ",
+            data: { crtfc_key: "John", 
+                    corp_code: "00126380",
+                    bsns_year: "2018",
+                    reprt_code: "11011" }
+        })
+            .done(function (msg) {
+                alert("Data Saved: " + msg);
+            });
+    </script>
+
+
+</body>
+
 </html>
